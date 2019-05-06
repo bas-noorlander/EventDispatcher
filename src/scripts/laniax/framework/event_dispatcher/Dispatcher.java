@@ -1,6 +1,7 @@
 package scripts.laniax.framework.event_dispatcher;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This is the dispatcher that dispatches various events to any subscribed listener.
@@ -46,7 +47,8 @@ public class Dispatcher {
 
         if (listeners.size() > 0) {
 
-            for (EventListener listener : listeners) {
+            for (Iterator<EventListener<? extends Event>> iterator = listeners.iterator(); iterator.hasNext(); ) {
+                EventListener listener = iterator.next();
 
                 if (event.isPropagationStopped())
                     break;
@@ -86,7 +88,7 @@ public class Dispatcher {
             return currentListenersSet;
         }
 
-        List<EventListener<? extends Event>> result = new ArrayList<>();
+        List<EventListener<? extends Event>> result = new CopyOnWriteArrayList<>();
         listeners.values().forEach(result::addAll);
 
         result.sort(Comparator.<EventListener<? extends Event>>comparingInt(EventListener::getPriority).reversed());
@@ -117,7 +119,7 @@ public class Dispatcher {
         List<EventListener<? extends Event>> currentListenersSet = listeners.get(event);
 
         if (currentListenersSet == null) {
-            currentListenersSet = new ArrayList<>();
+            currentListenersSet = new CopyOnWriteArrayList<>();
         } else if (currentListenersSet.contains(listener))
             return this;
 
