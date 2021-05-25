@@ -160,7 +160,3 @@ License
 Apache 2
 
 
-
-If you have any questions, feel free to shoot me a message on the TRiBot forums, or you can catch me on Discord. (Laniax#2980)
-
-
